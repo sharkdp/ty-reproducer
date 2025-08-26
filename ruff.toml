@@ -1,0 +1,6 @@
+target-version = "py313"
+
+exclude = ["issue_*"]
+
+[lint]
+extend-select = ["UP", "I", "B"]

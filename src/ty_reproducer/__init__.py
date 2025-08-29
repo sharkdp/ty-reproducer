@@ -48,7 +48,10 @@ def main(issue_number, force):
     prompt_file = folder / "PROMPT.md"
     prompt_file.write_text(PROMPT.replace("{issue_number}", str(issue_number)))
 
-    claude_path = Path.home() / ".claude" / "local" / "claude"
+    # Try to find claude on PATH first, fallback to ~/.claude/local/claude
+    claude_path = shutil.which("claude")
+    if claude_path is None:
+        claude_path = str(Path.home() / ".claude" / "local" / "claude")
 
     # Remove our VIRTUAL_ENV from the environment, so that nested "uv run" calls by Claude won't pick it up
     env = os.environ.copy()
@@ -56,7 +59,7 @@ def main(issue_number, force):
 
     subprocess.run(
         [
-            str(claude_path),
+            claude_path,
             "--allowedTools",
             "WebFetch(domain:github.com),Bash(uv add:*),Bash(uv run ty check:*)",
             "--permission-mode",

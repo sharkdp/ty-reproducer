@@ -52,7 +52,7 @@ def main(issue_number, force):
 
     # Remove our VIRTUAL_ENV from the environment, so that nested "uv run" calls by Claude won't pick it up
     env = os.environ.copy()
-    del env["VIRTUAL_ENV"]
+    env.pop("VIRTUAL_ENV", None)
 
     subprocess.run(
         [
